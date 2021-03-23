@@ -3,6 +3,8 @@
 
 I will update my code after this is uploaded
 
-Cya -garon
-
 Also, I added QuickBMS in the repo because why not, and I can distribute it.
+
+Also also, you need to make a folder called _extracted
+
+# okay bye love you xoxoxo -garon
