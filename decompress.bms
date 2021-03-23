@@ -1,0 +1,50 @@
+getdstring SIGN 4
+goto 0
+
+if SIGN == "SSZL"
+	# decompress SSZL lzs shell
+
+	comtype lzss0
+	idstring "SSZL"
+	get ZERO long
+	get ZSIZE long
+	get SIZE long
+	savepos OFFSET
+	get NAME basename
+	string NAME + ".arc"
+	clog NAME OFFSET ZSIZE SIZE
+
+elif SIGN == "VCRA"
+	# decompress VCRA arc archive
+
+	idstring "VCRA"
+    get FILES long
+    endian guess FILES
+    get ARCHIVE_SIZE long
+
+    math HAS_CRC = 0
+    math NAMESZ = 0x38
+    get TEST long
+    if TEST == 0
+        goto 0x40
+    else
+        goto -4 0 SEEK_CUR
+        math NAMESZ = 0x20
+        math HAS_CRC = 1
+    endif
+
+    for i = 0 < FILES
+        get OFFSET long
+        get SIZE long
+        if HAS_CRC != 0
+            get SOME_CRC long
+        endif
+        getdstring NAME NAMESZ
+        log NAME OFFSET SIZE
+    next i
+	
+else
+
+	print "Compression unsupported"
+
+endif
